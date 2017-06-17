@@ -9,6 +9,9 @@ public class Avaliador {
 	private double maiorLance = Double.MIN_VALUE;
 	
 	public void avaliar(Leilao leilao) {
+		if(leilao.naoTemLances())
+			throw new IllegalArgumentException("Não é possível avaliar um leilão sem lances.");
+		
 		for (Lance lance : leilao.getLances()) {
 			if(lance.getValor() < menorLance) {
 				menorLance = lance.getValor();

@@ -26,5 +26,9 @@ public class Leilao {
 	public List<Lance> getLances() {
 		return Collections.unmodifiableList(this.lances);
 	}
+
+	public boolean naoTemLances() {
+		return lances.isEmpty();
+	}
 	
 }
