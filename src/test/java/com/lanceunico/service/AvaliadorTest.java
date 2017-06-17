@@ -2,21 +2,39 @@ package com.lanceunico.service;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import com.lanceunico.builder.LeilaoBuilder;
 import com.lanceunico.model.Leilao;
 import com.lanceunico.model.Usuario;
 
 public class AvaliadorTest {
+	
+	private Avaliador avaliador;
+	
+	private Usuario u1;
+	
+	private Usuario u2;
+	
+	private Usuario u3; 
+	
+	@Before
+	public void init() {
+		avaliador = new Avaliador();
+		u1 = new Usuario("Maurício");
+		u2 = new Usuario("Guilherme");
+		u3 = new Usuario("Rafael");
+	}
+	
 
 	@Test
 	public void deveEntederLeilaoComApenasUmLance() {
-		Usuario u1 = new Usuario("Maria");
+		Leilao leilao = new LeilaoBuilder()
+								.para("Notebook i7")
+								.comLance(u1, 1000.0)
+								.build();
 		
-		Leilao leilao = new Leilao("Notebook i7");
-		leilao.propoe(u1, 1000);
-		
-		Avaliador avaliador = new Avaliador();
 		avaliador.avaliar(leilao);
 		
 		assertEquals(1000.0, avaliador.getMenorLance(), 0.0001);
@@ -26,16 +44,13 @@ public class AvaliadorTest {
 	
 	@Test
 	public void deveEntederLancesEmOrderCrescente() {
-		Usuario u1 = new Usuario("Maria");
-		Usuario u2 = new Usuario("Guilherme");
-		Usuario u3 = new Usuario("Rafael");
-		
-		Leilao leilao = new Leilao("Notebook i7");
-		leilao.propoe(u1, 2000);
-		leilao.propoe(u2, 2500);
-		leilao.propoe(u3, 2800);
-		
-		Avaliador avaliador = new Avaliador();
+		Leilao leilao = new LeilaoBuilder()
+								.para("Notebook i7")
+								.comLance(u1, 2000.0)
+								.comLance(u2, 2500.0)
+								.comLance(u3, 2800.0)
+								.build();
+											
 		avaliador.avaliar(leilao);
 		
 		assertEquals(2000.0, avaliador.getMenorLance(), 0.0001);
@@ -44,16 +59,13 @@ public class AvaliadorTest {
 	
 	@Test
 	public void deveEntederLancesEmOrderDecrescente() {
-		Usuario u1 = new Usuario("Maria");
-		Usuario u2 = new Usuario("Guilherme");
-		Usuario u3 = new Usuario("Rafael");
+		Leilao leilao = new LeilaoBuilder()
+								.para("Notebook i7")
+								.comLance(u1, 3000.0)
+								.comLance(u2, 2500.0)
+								.comLance(u3, 2000.0)
+								.build();
 		
-		Leilao leilao = new Leilao("Notebook i7");
-		leilao.propoe(u1, 3000);
-		leilao.propoe(u2, 2500);
-		leilao.propoe(u3, 2000);
-		
-		Avaliador avaliador = new Avaliador();
 		avaliador.avaliar(leilao);
 		
 		assertEquals(2000.0, avaliador.getMenorLance(), 0.0001);
@@ -62,18 +74,14 @@ public class AvaliadorTest {
 	
 	@Test
 	public void deveEntederLancesEmOrderAleatoria() {
-		Usuario u1 = new Usuario("Maria");
-		Usuario u2 = new Usuario("Guilherme");
-		Usuario u3 = new Usuario("Rafael");
-		Usuario u4 = new Usuario("Maurício");
+		Leilao leilao = new LeilaoBuilder()
+								.para("Notebook i7")
+								.comLance(u1, 3000.0)
+								.comLance(u2, 3200.0)
+								.comLance(u3, 2000.0)
+								.comLance(new Usuario("Paulo"), 2500.0)
+								.build();
 		
-		Leilao leilao = new Leilao("Notebook i7");
-		leilao.propoe(u1, 3000);
-		leilao.propoe(u2, 3200);
-		leilao.propoe(u3, 2000);
-		leilao.propoe(u4, 2500);
-		
-		Avaliador avaliador = new Avaliador();
 		avaliador.avaliar(leilao);
 		
 		assertEquals(2000.0, avaliador.getMenorLance(), 0.0001);

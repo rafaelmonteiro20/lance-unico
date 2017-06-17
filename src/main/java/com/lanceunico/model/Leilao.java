@@ -15,8 +15,8 @@ public class Leilao {
 		this.lances = new ArrayList<>();
 	}
 
-	public void propoe(Usuario usuario, double valor) {
-		this.lances.add(new Lance(usuario, valor));
+	public void propoe(Lance lance) {
+		this.lances.add(lance);
 	}
 	
 	public String getDescricao() {
