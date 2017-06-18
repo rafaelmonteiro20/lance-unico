@@ -31,4 +31,8 @@ public class Leilao {
 		return lances.isEmpty();
 	}
 	
+	public int quantidadeLances() {
+		return lances.size();
+	}
+	
 }
