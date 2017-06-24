@@ -1,5 +1,6 @@
 package com.lanceunico.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,8 +8,13 @@ import java.util.List;
 public class Leilao {
 
 	private String descricao;
+	
+	private LocalDate data;
 
 	private List<Lance> lances;
+	
+	private boolean encerrado;
+	
 	
 	public Leilao(String descricao) {
 		this.descricao = descricao;
@@ -19,10 +25,6 @@ public class Leilao {
 		if(naoTemLances() || podeDarLance(lance)) {
 			this.lances.add(lance);
 		}
-	}
-
-	public String getDescricao() {
-		return descricao;
 	}
 	
 	public List<Lance> getLances() {
@@ -52,8 +54,8 @@ public class Leilao {
 	private int quantidadeDeLancesDo(Usuario usuario) {
 		int total = 0;
 		
-		for (Lance l : lances) {
-			if(l.getUsuario().equals(usuario)) {
+		for (Lance lance : lances) {
+			if(lance.getUsuario().equals(usuario)) {
 				total++;
 			}
 		}
@@ -66,6 +68,26 @@ public class Leilao {
 			return null;
 		
 		return lances.get(quantidadeLances() - 1);
+	}
+	
+	public String getDescricao() {
+		return descricao;
+	}
+	
+	public LocalDate getData() {
+		return data;
+	}
+	
+	public void setData(LocalDate data) {
+		this.data = data;
+	}
+	
+	public boolean isEncerrado() {
+		return encerrado;
+	}
+	
+	public void encerra() {
+		this.encerrado = true;
 	}
 	
 }
