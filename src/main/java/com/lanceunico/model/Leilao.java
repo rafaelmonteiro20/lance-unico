@@ -86,7 +86,7 @@ public class Leilao {
 		return encerrado;
 	}
 	
-	public void encerra() {
+	public void encerrar() {
 		this.encerrado = true;
 	}
 	
