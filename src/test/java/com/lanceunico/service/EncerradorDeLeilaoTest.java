@@ -7,8 +7,10 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import com.lanceunico.builder.LeilaoBuilder;
 import com.lanceunico.dao.LeilaoDAO;
@@ -17,6 +19,20 @@ import com.lanceunico.notification.Notificador;
 
 public class EncerradorDeLeilaoTest {
 
+	private EncerradorDeLeilao encerrador;
+	
+	@Mock
+	private LeilaoDAO dao;
+	
+	@Mock
+	private Notificador notificador;
+	
+	@Before
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+		this.encerrador = new EncerradorDeLeilao(dao, notificador);
+	}
+	
 	@Test
 	public void deveEncerrarLeiloesQueComecaramUmaSemanaAtras() {
 		LocalDate data = LocalDate.now().minusDays(10);
@@ -31,12 +47,7 @@ public class EncerradorDeLeilaoTest {
 		
 		List<Leilao> leiloesAntigos = Arrays.asList(leilao1, leilao2);
 		
-		LeilaoDAO dao = mock(LeilaoDAO.class);
-		Notificador notificador = mock(Notificador.class);
-		
 		when(dao.correntes()).thenReturn(leiloesAntigos);
-		
-		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(dao, notificador);
 		encerrador.encerrar();
 		
 		assertTrue(leilao1.isEncerrado());
@@ -60,12 +71,7 @@ public class EncerradorDeLeilaoTest {
 		
 		List<Leilao> leiloes = Arrays.asList(leilao1, leilao2);
 		
-		LeilaoDAO dao = mock(LeilaoDAO.class);
-		Notificador notificador = mock(Notificador.class);
-		
 		when(dao.correntes()).thenReturn(leiloes);
-		
-		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(dao, notificador);
 		encerrador.encerrar();
 		
 		assertTrue(leilao1.isEncerrado());
@@ -77,12 +83,7 @@ public class EncerradorDeLeilaoTest {
 	public void naoDeveEncerrarLeiloesCasoNaoHajaNenhum() {
 		List<Leilao> leiloes = Arrays.asList();
 		
-		LeilaoDAO dao = mock(LeilaoDAO.class);
-		Notificador notificador = mock(Notificador.class);
-		
 		when(dao.correntes()).thenReturn(leiloes);
-		
-		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(dao, notificador);
 		encerrador.encerrar();
 		
 		assertEquals(0, encerrador.getTotal());
@@ -98,12 +99,7 @@ public class EncerradorDeLeilaoTest {
 		
 		List<Leilao> leiloesAntigos = Arrays.asList(leilao);
 		
-		LeilaoDAO dao = mock(LeilaoDAO.class);
-		Notificador notificador = mock(Notificador.class);
-		
 		when(dao.correntes()).thenReturn(leiloesAntigos);
-		
-		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(dao, notificador);
 		encerrador.encerrar();
 		
 		verify(dao, times(1)).atualizar(leilao);
@@ -123,13 +119,9 @@ public class EncerradorDeLeilaoTest {
 		
 		List<Leilao> leiloes = Arrays.asList(leilao1, leilao2);
 		
-		LeilaoDAO dao = mock(LeilaoDAO.class);
-		Notificador notificador = mock(Notificador.class);
-		
 		when(dao.correntes()).thenReturn(leiloes);
-		Mockito.doThrow(new RuntimeException()).when(dao).atualizar(leilao1);
+		doThrow(new RuntimeException()).when(dao).atualizar(leilao1);
 		
-		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(dao, notificador);
 		encerrador.encerrar();
 		
 		verify(dao).atualizar(leilao2);
