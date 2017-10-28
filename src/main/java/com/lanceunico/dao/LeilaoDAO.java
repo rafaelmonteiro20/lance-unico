@@ -8,6 +8,8 @@ public interface LeilaoDAO {
 
 	List<Leilao> correntes();
 	
+	List<Leilao> encerrados();
+	
 	void atualizar(Leilao leilao);
 	
 }
